@@ -86,12 +86,25 @@ body{
 
 /* ================== CARD CONTAINER ================== */
 .cards{
-    text-align:center; /* enables inline-block layout */
+    text-align:center;
+    perspective:1000px;
+}
+
+/* ================== FLOAT WRAPPER ================== */
+.card-wrap{
+    display:inline-block;
+    animation: float 2.5s infinite ease-in-out;
+}
+
+/* Floating animation */
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
 }
 
 /* ================== CARD ================== */
 .card{
-    display:inline-block;  /* ✅ NOW WORKS */
+    position:relative;
     width:260px;
     height:320px;
     margin:20px;
@@ -100,21 +113,18 @@ body{
     color:white;
     text-align:center;
     overflow:hidden;
-    animation: float 2.5s infinite ease-in-out;
     box-shadow:0 10px 30px rgba(0,0,0,0.6);
+    transform-style:preserve-3d;
     transition:transform 0.6s ease, box-shadow 0.6s ease;
-}
-
-/* Floating animation */
-@keyframes float{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-10px);}
 }
 
 /* Hover effect */
 .card:hover{
-    animation-play-state:paused;
-    transform:translateY(-10px) scale(1.05);
+    transform:
+        perspective(1000px)
+        translateY(-12px)
+        scale(1.06)
+        rotateX(45deg);
     box-shadow:
         0 10px 12px rgba(93,7,7,0.6),
         0 20px 40px rgba(127,245,73,0.9),
@@ -123,11 +133,14 @@ body{
 
 /* Card image */
 .card img{
+    position:absolute;
+    inset:0;
     width:100%;
     height:100%;
     object-fit:cover;
     opacity:0;
     transition:opacity 0.6s ease;
+    z-index:1;
 }
 
 .card:hover img{
@@ -135,12 +148,18 @@ body{
 }
 
 /* Card text */
+.card h2,
+.card p{
+    position:relative;
+    z-index:2;
+}
+
 .card h2{
     margin-top:15px;
 }
 
 .card p{
-    opacity:0.8;
+    opacity:0.85;
     padding:0 15px;
 }
 </style>
@@ -156,23 +175,31 @@ body{
 
 <!-- CARDS -->
 <div class="cards">
-    <div class="card">
-        <img src="./imgs/mac.jpg" alt="">
-        <h2>CSS Card</h2>
-        <p>Hover & Floating Animation</p>
+
+    <div class="card-wrap">
+        <div class="card">
+            <img src="./imgs/mac.jpg" alt="">
+            <h2>CSS Card</h2>
+            <p>Hover & Floating Animation</p>
+        </div>
     </div>
 
-    <div class="card">
-        <img src="./imgs/m2.jpeg" alt="">
-        <h2>CSS Card</h2>
-        <p>Hover & Floating Animation</p>
+    <div class="card-wrap">
+        <div class="card">
+            <img src="./imgs/m2.jpeg" alt="">
+            <h2>CSS Card</h2>
+            <p>Hover & Floating Animation</p>
+        </div>
     </div>
 
-    <div class="card">
-        <img src="./imgs/tp.png" alt="">
-        <h2>CSS Card</h2>
-        <p>Hover & Floating Animation</p>
+    <div class="card-wrap">
+        <div class="card">
+            <img src="./imgs/tp.png" alt="">
+            <h2>CSS Card</h2>
+            <p>Hover & Floating Animation</p>
+        </div>
     </div>
+
 </div>
 
 <!-- ================== JS LETTER SPLIT ================== -->
@@ -189,8 +216,7 @@ for (let char of text) {
         space.className = "space";
         space.innerHTML = "&nbsp;";
         textEl.appendChild(space);
-    }
-     else {
+    } else {
         const span = document.createElement("span");
         span.className = (count % 2 === 1) ? "s1" : "s2";
         span.innerText = char;
